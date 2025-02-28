@@ -1,0 +1,14 @@
+{
+  "name": "se_project_express",
+  "version": "0.1.0",
+  "description": "First Back end MC",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Manuel Calderon",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
