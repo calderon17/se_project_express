@@ -70,11 +70,48 @@ const deleteItem = (req, res) => {
         return res.status(BAD_REQUEST_CODE).send({ message: err.message });
       }
       return res.status(INTERNAL_SERVER_CODE).send({ message: err.message });
-
-      // res
-      //   .status(NOT_FOUND_CODE)
-      //   .send({ message: "Error from deleteItem", err });
     });
 };
 
-module.exports = { createItem, getItems, updateItem, deleteItem };
+const likeItem = (req, res) => {
+  clothingItemSchema
+    .findByIdAndUpdate(
+      req.params.itemId,
+      { $addToSet: { likes: req.user._id } },
+      { new: true }
+    )
+    .orFail()
+    .then((item) => res.status(200).send({ data: item }))
+    .catch((err) => {
+      if (err.name === "DocumentNotFoundError") {
+        return res.status(NOT_FOUND_CODE).send({ message: err.message });
+      }
+      return res.status(BAD_REQUEST_CODE).send({ message: err.message });
+    });
+};
+
+const dislikeItem = (req, res) => {
+  clothingItemSchema
+    .findByIdAndUpdate(
+      req.params.itemId,
+      { $pull: { likes: req.user._id } },
+      { new: true }
+    )
+    .orFail()
+    .then((item) => res.status(200).send({ data: item }))
+    .catch((err) => {
+      if (err.name === "DocumentNotFoundError") {
+        return res.status(NOT_FOUND_CODE).send({ message: err.message });
+      }
+      return res.status(BAD_REQUEST_CODE).send({ message: err.message });
+    });
+};
+
+module.exports = {
+  createItem,
+  getItems,
+  updateItem,
+  deleteItem,
+  likeItem,
+  dislikeItem,
+};
