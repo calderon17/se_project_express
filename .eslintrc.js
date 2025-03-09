@@ -1,5 +1,3 @@
-const _id = "sfsd";
-
 module.exports = {
   env: {
     es2021: true,

@@ -24,9 +24,6 @@ const createItem = (req, res) => {
         return res.status(BAD_REQUEST_CODE).send({ message: err.message });
       }
       return res.status(INTERNAL_SERVER_CODE).send({ message: err.message });
-      // res
-      //   .status(INTERNAL_SERVER_CODE)
-      //   .send({ message: "Error from createItem", err });
     });
 };
 
@@ -66,7 +63,8 @@ const deleteItem = (req, res) => {
       console.error(err);
       if (err.name === "DocumentNotFoundError") {
         return res.status(NOT_FOUND_CODE).send({ message: err.message });
-      } else if (err.name === "CastError") {
+      }
+      if (err.name === "CastError") {
         return res.status(BAD_REQUEST_CODE).send({ message: err.message });
       }
       return res.status(INTERNAL_SERVER_CODE).send({ message: err.message });

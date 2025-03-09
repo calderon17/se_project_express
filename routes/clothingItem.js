@@ -11,23 +11,23 @@ const {
 
 // crud
 
-//create
+// create
 
 router.post("/", createItem);
 
-//read
+// read
 
 router.get("/", getItems);
 
-//update
+// update
 
 router.put("/:itemId", updateItem);
 
-//delete
+// delete
 
 router.delete("/:itemId", deleteItem);
 
-//like and item
+// like and item
 
 router.put("/:itemId/likes", likeItem);
 
