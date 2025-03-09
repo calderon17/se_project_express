@@ -1,4 +1,4 @@
-const clothingItemSchema = require("..//models/clothingItem");
+const clothingItemSchema = require("../models/clothingItem");
 const {
   INTERNAL_SERVER_CODE,
   BAD_REQUEST_CODE,
