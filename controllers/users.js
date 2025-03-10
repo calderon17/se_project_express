@@ -12,7 +12,7 @@ const getUsers = (req, res) => {
       console.error(err);
       return res
         .status(INTERNAL_SERVER_CODE)
-        .send({ message: "An internal error has occurred on the server", err });
+        .send({ message: "An internal error has occurred on the server" });
     });
 };
 
@@ -27,11 +27,11 @@ const createUser = (req, res) => {
       if (err.name === "ValidationError") {
         return res
           .status(BAD_REQUEST_CODE)
-          .send({ message: "A bad request has occurred on the server", err });
+          .send({ message: "A bad request has occurred on the server" });
       }
       return res
         .status(INTERNAL_SERVER_CODE)
-        .send({ message: "An internal error has occurred on the server", err });
+        .send({ message: "An internal error has occurred on the server" });
     });
 };
 
@@ -43,18 +43,16 @@ const getUser = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err.name === "DocumentNotFoundError") {
-        return res
-          .status(NOT_FOUND_CODE)
-          .send({ message: "item not found", err });
+        return res.status(NOT_FOUND_CODE).send({ message: "item not found" });
       }
       if (err.name === "CastError") {
         return res
           .status(BAD_REQUEST_CODE)
-          .send({ message: "A bad request has occurred on the server", err });
+          .send({ message: "A bad request has occurred on the server" });
       }
       return res
         .status(INTERNAL_SERVER_CODE)
-        .send({ message: "An internal error has occurred on the server", err });
+        .send({ message: "An internal error has occurred on the server" });
     });
 };
 

@@ -23,11 +23,11 @@ const createItem = (req, res) => {
       if (err.name === "ValidationError") {
         return res
           .status(BAD_REQUEST_CODE)
-          .send({ message: "A bad request has occurred on the server", err });
+          .send({ message: "A bad request has occurred on the server" });
       }
       return res
         .status(INTERNAL_SERVER_CODE)
-        .send({ message: "An internal error has occurred on the server", err });
+        .send({ message: "An internal error has occurred on the server" });
     });
 };
 
@@ -39,7 +39,7 @@ const getItems = (req, res) => {
       console.error(err);
       res
         .status(INTERNAL_SERVER_CODE)
-        .send({ message: "An internal error has occurred on the server", err });
+        .send({ message: "An internal error has occurred on the server" });
     });
 };
 
@@ -54,18 +54,16 @@ const deleteItem = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err.name === "DocumentNotFoundError") {
-        return res
-          .status(NOT_FOUND_CODE)
-          .send({ message: "item not found", err });
+        return res.status(NOT_FOUND_CODE).send({ message: "item not found" });
       }
       if (err.name === "CastError") {
         return res
           .status(BAD_REQUEST_CODE)
-          .send({ message: "A bad request has occurred on the server", err });
+          .send({ message: "A bad request has occurred on the server" });
       }
       return res
         .status(INTERNAL_SERVER_CODE)
-        .send({ message: "An internal error has occurred on the server", err });
+        .send({ message: "An internal error has occurred on the server" });
     });
 };
 
@@ -80,18 +78,16 @@ const likeItem = (req, res) => {
     .then((item) => res.status(200).send({ data: item }))
     .catch((err) => {
       if (err.name === "DocumentNotFoundError") {
-        return res
-          .status(NOT_FOUND_CODE)
-          .send({ message: "item not found", err });
+        return res.status(NOT_FOUND_CODE).send({ message: "item not found" });
       }
       if (err.name === "CastError") {
         return res
           .status(BAD_REQUEST_CODE)
-          .send({ message: "A bad request has occurred on the server", err });
+          .send({ message: "A bad request has occurred on the server" });
       }
       return res
         .status(INTERNAL_SERVER_CODE)
-        .send({ message: "An internal error has occurred on the server", err });
+        .send({ message: "An internal error has occurred on the server" });
     });
 };
 
@@ -106,18 +102,16 @@ const dislikeItem = (req, res) => {
     .then((item) => res.status(200).send({ data: item }))
     .catch((err) => {
       if (err.name === "DocumentNotFoundError") {
-        return res
-          .status(NOT_FOUND_CODE)
-          .send({ message: "item not found", err });
+        return res.status(NOT_FOUND_CODE).send({ message: "item not found" });
       }
       if (err.name === "CastError") {
         return res
           .status(BAD_REQUEST_CODE)
-          .send({ message: "A bad request has occurred on the server", err });
+          .send({ message: "A bad request has occurred on the server" });
       }
       return res
         .status(INTERNAL_SERVER_CODE)
-        .send({ message: "An internal error has occurred on the server", err });
+        .send({ message: "An internal error has occurred on the server" });
     });
 };
 
