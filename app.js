@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const { createUser, login } = require("./controllers/users");
 const routes = require("./routes");
 
 const app = express();
@@ -14,14 +15,10 @@ mongoose
 
 app.use(express.json());
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: "5d8b8592978f8bd833ca8133",
-  };
-  next();
-});
-
 app.use(routes);
+
+app.post("/signin", login);
+app.post("/signup", createUser);
 
 app.listen(PORT, () => {
   console.log(`listening on port 3001`);
