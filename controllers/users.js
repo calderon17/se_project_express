@@ -72,13 +72,20 @@ const getCurrentUser = (req, res) => {
 };
 
 const updateCurrentUser = (req, res) => {
+  const updates = {};
   const { name, avatar } = req.body;
 
-  User.findByIdAndUpdate(
-    req.user._id,
-    { name, avatar },
-    { new: true, runValidators: true }
-  )
+  if (name) {
+    updates.name = name;
+  }
+  if (avatar) {
+    updates.avatar = avatar;
+  }
+
+  User.findByIdAndUpdate(req.user._id, updates, {
+    new: true,
+    runValidators: true,
+  })
     .orFail()
     .then((user) => res.status(200).send(user))
     .catch((err) => {

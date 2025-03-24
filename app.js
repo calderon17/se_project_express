@@ -2,8 +2,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const { createUser, login } = require("./controllers/users");
 const routes = require("./routes");
+const cors = require("cors");
 
-const app = express();
+const app = express(); // this goes frist over all
 const { PORT = 3001 } = process.env;
 
 mongoose
@@ -13,6 +14,7 @@ mongoose
   })
   .catch((e) => console.error(e));
 
+app.use(cors());
 app.use(express.json()); // needs to be 1st or before routes
 
 app.post("/signin", login);
