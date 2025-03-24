@@ -13,12 +13,12 @@ mongoose
   })
   .catch((e) => console.error(e));
 
-app.use(express.json());
-
-app.use(routes);
+app.use(express.json()); // needs to be 1st or before routes
 
 app.post("/signin", login);
 app.post("/signup", createUser);
+
+app.use(routes); // needs to be after routes for proper order
 
 app.listen(PORT, () => {
   console.log(`listening on port 3001`);
