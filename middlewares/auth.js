@@ -17,7 +17,7 @@ const auth = (req, res, next) => {
     const payload = jwt.verify(token, JWT_SECRET);
 
     // 5. Add payload to request object
-    req.user = payload;
+    req.user.id = payload._id;
 
     // 6. Move to next middleware
     return next();
