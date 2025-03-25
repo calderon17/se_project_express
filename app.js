@@ -1,8 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors"); // before import controller/users
+
 const { createUser, login } = require("./controllers/users");
 const routes = require("./routes");
-const cors = require("cors");
 
 const app = express(); // this goes frist over all
 const { PORT = 3001 } = process.env;

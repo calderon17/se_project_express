@@ -20,7 +20,7 @@ const auth = (req, res, next) => {
     req.user = payload;
 
     // 6. Move to next middleware
-    next();
+    return next();
   } catch (err) {
     // If token is invalid or expired, return 401
     return res.status(401).send({ message: "Invalid token" });

@@ -5,7 +5,6 @@ const {
   NOT_FOUND_CODE,
   FORBIDDEN_CODE,
 } = require("../utils/errors");
-const User = require("../models/user");
 
 const createItem = (req, res) => {
   console.log(req);
