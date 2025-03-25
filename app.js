@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const cors = require("cors"); // before import controller/users
 
 const { createUser, login } = require("./controllers/users");
-const { auth } = require("./middlewares/auth");
 const routes = require("./routes");
 
 const app = express(); // this goes frist over all
@@ -27,5 +26,3 @@ app.use(routes); // needs to be after routes for proper order
 app.listen(PORT, () => {
   console.log(`listening on port 3001`);
 });
-
-app.use(auth, routes);
