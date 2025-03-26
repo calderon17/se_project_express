@@ -18,6 +18,13 @@ mongoose
 app.use(cors());
 app.use(express.json()); // needs to be 1st or before routes
 
+app.use((req, res, next) => {
+  req.user = {
+    _id: "5d8b8592978f8bd833ca8133", // Example user ID
+  };
+  next();
+});
+
 app.post("/signin", login);
 app.post("/signup", createUser);
 
