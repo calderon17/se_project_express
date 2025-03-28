@@ -32,11 +32,10 @@ const createUser = (req, res) => {
     )
 
     .then((user) => {
-      // before sending, delete the user.password
       const userWithoutPassword = user.toObject();
       delete userWithoutPassword.password;
       return res.status(201).send(userWithoutPassword);
-    }) // remove the hash field here
+    })
 
     .catch((err) => {
       console.error(err);
