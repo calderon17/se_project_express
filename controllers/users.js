@@ -31,7 +31,11 @@ const createUser = (req, res) => {
       User.create({ name, avatar, email: req.body.email, password: hash })
     )
 
-    .then((user) => res.status(201).send(user))
+    .then((user) => {
+      //before sending, delete the user.password
+      res.status(201).send(user);
+    }) // remove the hasf field here
+
     .catch((err) => {
       console.error(err);
       if (err.name === "ValidationError") {
@@ -118,7 +122,7 @@ const login = (req, res) => {
     .catch((err) => {
       console.error(err);
       return res
-        .status(NOT_FOUND_CODE)
+        .status(BAD_REQUEST_CODE)
         .send({ message: "Email or password is incorrect" });
     });
 };

@@ -69,6 +69,9 @@ const deleteItem = (req, res) => {
           .status(BAD_REQUEST_CODE)
           .send({ message: "A bad request has occurred on the server" });
       }
+      if (err.statusCode === FORBIDDEN_CODE) {
+        return res.status(FORBIDDEN_CODE).send({ message: err.message });
+      }
       return res
         .status(INTERNAL_SERVER_CODE)
         .send({ message: "An internal error has occurred on the server" });
