@@ -32,7 +32,7 @@ const createUser = (req, res) => {
     )
 
     .then((user) => {
-      //before sending, delete the user.password
+      // before sending, delete the user.password
       const userWithoutPassword = user.toObject();
       delete userWithoutPassword.password;
       return res.status(201).send(userWithoutPassword);
