@@ -78,7 +78,7 @@ const updateCurrentUser = (req, res) => {
     updates.avatar = avatar;
   }
 
-  User.findByIdAndUpdate(req.user._id, updates, {
+  return User.findByIdAndUpdate(req.user._id, updates, {
     new: true,
     runValidators: true,
   })
