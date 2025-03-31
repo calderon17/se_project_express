@@ -56,9 +56,10 @@ const deleteItem = (req, res) => {
           .status(FORBIDDEN_CODE)
           .send({ message: "You are not authorized to delete this item" });
       }
-      return clothingItemSchema.findByIdAndDelete(itemId);
+      return clothingItemSchema.findByIdAndDelete.then((item) =>
+        res.status(200).send({ data: item })
+      )(itemId);
     })
-    .then((item) => res.status(200).send({ data: item }))
     .catch((err) => {
       console.error(err);
       if (err.name === "DocumentNotFoundError") {

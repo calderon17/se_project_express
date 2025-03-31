@@ -7,19 +7,9 @@ const {
   INTERNAL_SERVER_CODE,
   NOT_FOUND_CODE,
   CONFLICT_CODE,
+  UNAUTHORIZED_CODE,
 } = require("../utils/errors");
 const { JWT_SECRET } = require("../utils/config");
-
-const getUsers = (req, res) => {
-  User.find({})
-    .then((users) => res.status(200).send(users))
-    .catch((err) => {
-      console.error(err);
-      return res
-        .status(INTERNAL_SERVER_CODE)
-        .send({ message: "An internal error has occurred on the server" });
-    });
-};
 
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
@@ -113,6 +103,11 @@ const updateCurrentUser = (req, res) => {
 const login = (req, res) => {
   const { email, password } = req.body;
 
+  if (!email || !password) {
+    return res
+      .status(BAD_REQUEST_CODE)
+      .send({ message: "the email and  passwrods fiels are required " });
+  }
   User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
@@ -123,13 +118,12 @@ const login = (req, res) => {
     .catch((err) => {
       console.error(err);
       return res
-        .status(BAD_REQUEST_CODE)
+        .status(UNAUTHORIZED_CODE)
         .send({ message: "Email or password is incorrect" });
     });
 };
 
 module.exports = {
-  getUsers,
   createUser,
   login,
   getCurrentUser,
