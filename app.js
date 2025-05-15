@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+require("dotenv").config();
 const { errors } = require("celebrate"); //theory
 const { requestLogger, errorLogger } = require("./middlewares/logger"); //theory // before import controller/users
 
@@ -42,7 +43,7 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`listening on port 3001`);
+  console.log(`listening on ${PORT}`);
 });
 
 // ... all other app.use() statements
