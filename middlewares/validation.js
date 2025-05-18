@@ -77,4 +77,5 @@ module.exports = {
   validateUserInfo,
   validateClothingItem,
   validateIds,
+  validateURL,
 };
