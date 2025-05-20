@@ -14,7 +14,7 @@ const routes = require("./routes");
 const app = express(); // this goes frist over all
 const { PORT = 3001 } = process.env;
 
-const errorHandler = require("./middlewares/error-handler");
+const { errorHandler } = require("./middlewares/error-handler");
 
 mongoose
   .connect("mongodb://127.0.0.1:27017/wtwr_db")
