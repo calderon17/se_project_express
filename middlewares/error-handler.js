@@ -1,31 +1,26 @@
+const ApiError = require("../errors/ApiError");
+const BadRequestError = require("../errors/BadRequestError");
+const UnauthorizedError = require("../errors/UnauthorizedError");
+const ForbiddenError = require("../errors/ForbiddenError");
+const NotFoundError = require("../errors/NotFoundError");
+const ConflictError = require("../errors/ConflictError");
+
 const errorHandler = (err, req, res, next) => {
   const statusCode = err.statusCode || 500;
-  let message;
-
-  switch (statusCode) {
-    case 400:
-      message = err.message || "Bad Request";
-      break;
-    case 401:
-      message = err.message || "Unauthorized";
-      break;
-    case 403:
-      message = err.message || "Forbidden";
-      break;
-    case 404:
-      message = err.message || "Not Found";
-      break;
-    case 409:
-      message = err.message || "Conflict";
-      break;
-    default:
-      message = "An error occurred on the server";
-  }
+  const message = err.message || "An error occurred on the server";
 
   res.status(statusCode).send({
     status: statusCode,
-    message: message,
+    message, // Using object shorthand here
   });
 };
 
-module.exports = errorHandler;
+module.exports = {
+  ApiError,
+  BadRequestError,
+  UnauthorizedError,
+  ForbiddenError,
+  NotFoundError,
+  ConflictError,
+  errorHandler,
+};

@@ -2,8 +2,11 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
-const { errors } = require("celebrate"); //theory
-const { requestLogger, errorLogger } = require("./utils/logger"); //theory // before import controller/users
+
+const { errors } = require("celebrate"); // theory
+const { celebrate, Joi } = require("celebrate");
+
+const { requestLogger, errorLogger } = require("./utils/logger"); // theory // before import controller/users
 
 const { createUser, login } = require("./controllers/users");
 const routes = require("./routes");
@@ -30,12 +33,39 @@ app.get("/crash-test", () => {
   }, 0);
 });
 
+app.post(
+  "/signin",
+  celebrate({
+    body: Joi.object().keys({
+      email: Joi.string().required().email(),
+      password: Joi.string().required().min(8),
+    }),
+  }),
+  login
+);
+
+/*
 app.post("/signin", login);
-app.post("/signup", createUser);
+*/
+
+app.post(
+  "/signup",
+  celebrate({
+    body: Joi.object().keys({
+      name: Joi.string().required().min(2).max(30),
+      avatar: Joi.string().uri(),
+      email: Joi.string().required().email(),
+      password: Joi.string().required().min(8),
+    }),
+  }),
+  createUser
+);
+
+/* app.post("/signup", createUser); */
 
 app.use(routes); // needs to be after routes for proper order
 
-app.use(errorLogger); //theory
+app.use(errorLogger); // theory
 app.use(errors()); // celebrate error handler //theory
 app.use(errorHandler);
 

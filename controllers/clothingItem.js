@@ -1,12 +1,16 @@
 const clothingItemSchema = require("../models/clothingItem");
-const {
-  INTERNAL_SERVER_CODE,
-  BAD_REQUEST_CODE,
-  NOT_FOUND_CODE,
-  FORBIDDEN_CODE,
-} = require("../utils/errors");
+// const {
+//   INTERNAL_SERVER_CODE,
+//   BAD_REQUEST_CODE,
+//   NOT_FOUND_CODE,
+//   FORBIDDEN_CODE,
+// } = require("../utils/errors");
 
-const createItem = (req, res) => {
+const { BadRequestError } = require("../errors/BadRequestError");
+const { NotFoundError } = require("../errors/NotFoundError");
+const { ForbiddenError } = require("../errors/ForbiddenError");
+
+const createItem = (req, res, next) => {
   console.log(req);
   console.log(req.body);
 
@@ -16,35 +20,32 @@ const createItem = (req, res) => {
   clothingItemSchema
     .create({ name, weather, imageUrl, owner })
     .then((item) => {
-      console.log(item);
+      if (!item) {
+        throw new BadRequestError("Failed to create item");
+      }
       res.send({ data: item });
     })
     .catch((err) => {
-      console.error(err);
       if (err.name === "ValidationError") {
-        return res
-          .status(BAD_REQUEST_CODE)
-          .send({ message: "A bad request has occurred on the server" });
+        throw new BadRequestError("Invalid data provided");
       }
-      return res
-        .status(INTERNAL_SERVER_CODE)
-        .send({ message: "An internal error has occurred on the server" });
+      next(err);
     });
 };
 
-const getItems = (req, res) => {
+const getItems = (req, res, next) => {
   clothingItemSchema
     .find({})
-    .then((items) => res.status(200).send(items))
-    .catch((err) => {
-      console.error(err);
-      res
-        .status(INTERNAL_SERVER_CODE)
-        .send({ message: "An internal error has occurred on the server" });
-    });
+    .then((items) => {
+      if (!items) {
+        throw new NotFoundError("No items found");
+      }
+      res.send({ data: items });
+    })
+    .catch(next);
 };
 
-const deleteItem = (req, res) => {
+const deleteItem = (req, res, next) => {
   const { itemId } = req.params;
 
   clothingItemSchema
@@ -52,34 +53,28 @@ const deleteItem = (req, res) => {
     .orFail()
     .then((item) => {
       if (item.owner.toString() !== req.user._id) {
-        return res
-          .status(FORBIDDEN_CODE)
-          .send({ message: "You are not authorized to delete this item" });
+        throw new ForbiddenError("You are not authorized to delete this item");
       }
-      return clothingItemSchema
-        .findByIdAndDelete(itemId)
-        .then((deletedItem) => res.status(200).send({ data: deletedItem }));
+      return clothingItemSchema.findByIdAndDelete(itemId);
+    })
+    .then((deletedItem) => {
+      if (!deletedItem) {
+        throw new NotFoundError("Item not found");
+      }
+      res.send({ data: deletedItem });
     })
     .catch((err) => {
-      console.error(err);
       if (err.name === "DocumentNotFoundError") {
-        return res.status(NOT_FOUND_CODE).send({ message: "Item not found" });
+        throw new NotFoundError("Item not found");
       }
       if (err.name === "CastError") {
-        return res
-          .status(BAD_REQUEST_CODE)
-          .send({ message: "A bad request has occurred on the server" });
+        throw new BadRequestError("Invalid item ID");
       }
-      if (err.statusCode === FORBIDDEN_CODE) {
-        return res.status(FORBIDDEN_CODE).send({ message: err.message });
-      }
-      return res
-        .status(INTERNAL_SERVER_CODE)
-        .send({ message: "An internal error has occurred on the server" });
+      next(err);
     });
 };
 
-const likeItem = (req, res) => {
+const likeItem = (req, res, next) => {
   clothingItemSchema
     .findByIdAndUpdate(
       req.params.itemId,
@@ -87,23 +82,24 @@ const likeItem = (req, res) => {
       { new: true }
     )
     .orFail()
-    .then((item) => res.status(200).send({ data: item }))
+    .then((item) => {
+      if (!item) {
+        throw new NotFoundError("Item not found");
+      }
+      res.send({ data: item });
+    })
     .catch((err) => {
       if (err.name === "DocumentNotFoundError") {
-        return res.status(NOT_FOUND_CODE).send({ message: "item not found" });
+        throw new NotFoundError("Item not found");
       }
       if (err.name === "CastError") {
-        return res
-          .status(BAD_REQUEST_CODE)
-          .send({ message: "A bad request has occurred on the server" });
+        throw new BadRequestError("Invalid item ID");
       }
-      return res
-        .status(INTERNAL_SERVER_CODE)
-        .send({ message: "An internal error has occurred on the server" });
+      next(err);
     });
 };
 
-const dislikeItem = (req, res) => {
+const dislikeItem = (req, res, next) => {
   clothingItemSchema
     .findByIdAndUpdate(
       req.params.itemId,
@@ -111,19 +107,20 @@ const dislikeItem = (req, res) => {
       { new: true }
     )
     .orFail()
-    .then((item) => res.status(200).send({ data: item }))
+    .then((item) => {
+      if (!item) {
+        throw new NotFoundError("Item not found");
+      }
+      res.send({ data: item });
+    })
     .catch((err) => {
       if (err.name === "DocumentNotFoundError") {
-        return res.status(NOT_FOUND_CODE).send({ message: "item not found" });
+        throw new NotFoundError("Item not found");
       }
       if (err.name === "CastError") {
-        return res
-          .status(BAD_REQUEST_CODE)
-          .send({ message: "A bad request has occurred on the server" });
+        throw new BadRequestError("Invalid item ID");
       }
-      return res
-        .status(INTERNAL_SERVER_CODE)
-        .send({ message: "An internal error has occurred on the server" });
+      next(err);
     });
 };
 
