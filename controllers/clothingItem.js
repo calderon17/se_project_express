@@ -5,9 +5,6 @@ const NotFoundError = require("../errors/NotFoundError");
 const ForbiddenError = require("../errors/ForbiddenError");
 
 const createItem = (req, res, next) => {
-  console.log(req);
-  console.log(req.body);
-
   const { name, weather, imageUrl } = req.body;
   const owner = req.user._id;
 
@@ -15,16 +12,15 @@ const createItem = (req, res, next) => {
     .create({ name, weather, imageUrl, owner })
     .then((item) => {
       if (!item) {
-        return next(new BadRequestError("Failed to create item"));
+        next(new BadRequestError("Failed to create item"));
       }
       res.send({ data: item });
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
-        return next(new BadRequestError("Invalid data provided"));
-      } else {
-        return next(err);
+        next(new BadRequestError("Invalid data provided"));
       }
+      next(err);
     });
 };
 
@@ -33,7 +29,7 @@ const getItems = (req, res, next) => {
     .find({})
     .then((items) => {
       if (!items) {
-        return next(new NotFoundError("No items found"));
+        next(new NotFoundError("No items found"));
       }
       res.send({ data: items });
     })
@@ -48,26 +44,24 @@ const deleteItem = (req, res, next) => {
     .orFail()
     .then((item) => {
       if (item.owner.toString() !== req.user._id) {
-        return next(
-          new ForbiddenError("You are not authorized to delete this item")
-        );
+        next(new ForbiddenError("You are not authorized to delete this item"));
       }
       return clothingItemSchema.findByIdAndDelete(itemId);
     })
     .then((deletedItem) => {
       if (!deletedItem) {
-        return next(new NotFoundError("Item not found"));
+        next(new NotFoundError("Item not found"));
       }
       res.send({ data: deletedItem });
     })
     .catch((err) => {
       if (err.name === "DocumentNotFoundError") {
-        return next(new NotFoundError("Item not found"));
-      } else if (err.name === "CastError") {
-        return next(new BadRequestError("Invalid item ID"));
-      } else {
-        return next(err);
+        next(new NotFoundError("Item not found"));
       }
+      if (err.name === "CastError") {
+        next(new BadRequestError("Invalid item ID"));
+      }
+      next(err);
     });
 };
 
@@ -81,18 +75,18 @@ const likeItem = (req, res, next) => {
     .orFail()
     .then((item) => {
       if (!item) {
-        return next(new NotFoundError("Item not found"));
+        next(new NotFoundError("Item not found"));
       }
       res.send({ data: item });
     })
     .catch((err) => {
       if (err.name === "DocumentNotFoundError") {
-        return next(new NotFoundError("Item not found"));
-      } else if (err.name === "CastError") {
-        return next(new BadRequestError("Invalid item ID"));
-      } else {
-        return next(err);
+        next(new NotFoundError("Item not found"));
       }
+      if (err.name === "CastError") {
+        next(new BadRequestError("Invalid item ID"));
+      }
+      next(err);
     });
 };
 
@@ -106,18 +100,18 @@ const dislikeItem = (req, res, next) => {
     .orFail()
     .then((item) => {
       if (!item) {
-        return next(new NotFoundError("Item not found"));
+        next(new NotFoundError("Item not found"));
       }
       res.send({ data: item });
     })
     .catch((err) => {
       if (err.name === "DocumentNotFoundError") {
-        return next(new NotFoundError("Item not found"));
-      } else if (err.name === "CastError") {
-        return next(new BadRequestError("Invalid item ID"));
-      } else {
-        return next(err);
+        next(new NotFoundError("Item not found"));
       }
+      if (err.name === "CastError") {
+        next(new BadRequestError("Invalid item ID"));
+      }
+      next(err);
     });
 };
 

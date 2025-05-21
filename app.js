@@ -29,7 +29,7 @@ app.use(express.json()); // needs to be 1st or before routes
 app.use(requestLogger);
 app.get("/crash-test", () => {
   setTimeout(() => {
-    next(new Error("Server will crash now"));
+    throw new Error("Server will crash now");
   }, 0);
 });
 
