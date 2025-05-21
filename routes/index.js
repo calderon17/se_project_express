@@ -2,9 +2,9 @@ const router = require("express").Router();
 const { errors } = require("celebrate");
 const clothingItem = require("./clothingItem");
 const userRouter = require("./users");
-const { errorHandler } = require("../middlewares/error-handler");
+const errorHandler = require("../middlewares/error-handler");
 
-const { NotFoundError } = require("../errors/NotFoundError");
+const NotFoundError = require("../errors/NotFoundError");
 
 router.use("/items", clothingItem);
 
