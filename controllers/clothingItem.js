@@ -44,7 +44,9 @@ const deleteItem = (req, res, next) => {
     .orFail()
     .then((item) => {
       if (item.owner.toString() !== req.user._id) {
-        next(new ForbiddenError("You are not authorized to delete this item"));
+        return next(
+          new ForbiddenError("You are not authorized to delete this item")
+        );
       }
       return clothingItemSchema.findByIdAndDelete(itemId);
     })
